@@ -160,7 +160,7 @@ if st.button("예측하기"):
         input_df.loc[0, "Aggregate_type_Siliceous"] = 1
     else:
         input_df.loc[0, "Aggregate_type_Unknown"] = 1
-
+ 
     # 예측
     prediction = model.predict(input_df)[0]
 
