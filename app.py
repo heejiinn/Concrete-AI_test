@@ -32,15 +32,16 @@ temperature = st.number_input("Temperature (°C)", value=600.0)
 fc_28 = st.number_input("FC_28 (MPa)", value=40.0)
 cement = st.number_input("Cement (kg/m³)", value=400.0)
 water = st.number_input("Water (kg/m³)", value=180.0)
+aggregate = st.number_input("Coarse aggregate / 굵은골재 (kg/m³)", value=1000.0)
+sand = st.number_input("Fine aggregate / 잔골재 (kg/m³)", value=700.0)
+aggregate_type = st.selectbox("Aggregate type / 골재 종류", ["Carbonate", "Siliceous", "Unknown"])
 
 if cement > 0:
     wc = water / cement
 else:
     wc = 0
 
-st.write(
-    f"W/C = {wc:.3f}"
-)
+st.write(f"W/C = {wc:.3f}")
 
 if st.button("예측하기"):
     # 학습 때 사용한 변수 구조와 동일한 빈 데이터 생성
@@ -53,6 +54,18 @@ if st.button("예측하기"):
     input_df.loc[0, "W/C"] = wc
     input_df.loc[0, "Cement"] = cement
     input_df.loc[0, "Water"] = water
+    input_df.loc[0, "Aggregate"] = aggregate
+    input_df.loc[0, "Sand"] = sand
+    input_df.loc[0, "Aggregate_type_Carbonate"] = 0
+    input_df.loc[0, "Aggregate_type_Siliceous"] = 0
+    input_df.loc[0, "Aggregate_type_Unknown"] = 0
+
+    if aggregate_type == "Carbonate":
+        input_df.loc[0, "Aggregate_type_Carbonate"] = 1
+    elif aggregate_type == "Siliceous":
+        input_df.loc[0, "Aggregate_type_Siliceous"] = 1
+    else:
+        input_df.loc[0, "Aggregate_type_Unknown"] = 1
 
     # 예측
     prediction = model.predict(input_df)[0]
