@@ -1,14 +1,26 @@
 import streamlit as st
 
-PASSWORD = "Concrete2026"
+PASSWORD = "concrete2026"
 
-pwd = st.text_input(
-    "비밀번호를 입력하세요",
-    type="password"
-)
+st.title("화재 후 콘크리트 압축강도 예측")
 
-if pwd != PASSWORD:
-    st.warning("비밀번호를 입력해야 접속할 수 있습니다.")
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+if not st.session_state.authenticated:
+    pwd = st.text_input(
+        "비밀번호를 입력하세요",
+        type="password",
+        key="password_input"
+    )
+
+    if st.button("로그인"):
+        if pwd == PASSWORD:
+            st.session_state.authenticated = True
+            st.rerun()
+        else:
+            st.error("비밀번호가 틀렸습니다.")
+
     st.stop()
 
 import pandas as pd
