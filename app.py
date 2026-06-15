@@ -1,6 +1,6 @@
 import streamlit as st
 
-PASSWORD = "concrete2026"
+PASSWORD = "Concrete2026"
 
 st.title("화재 후 콘크리트 압축강도 예측")
 
