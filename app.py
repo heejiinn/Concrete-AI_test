@@ -85,7 +85,7 @@ if st.button("+ Add Fiber"):
 fibers = []
 
 for i in range(st.session_state.fiber_count):
-    st.subheader(f"Fiber {i+1}")
+    st.write(f"Fiber {i+1}")
 
     fiber_type = st.selectbox(
         f"Fiber {i+1} type",
