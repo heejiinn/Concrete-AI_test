@@ -1,6 +1,6 @@
 import streamlit as st
 
-PASSWORD = "concrete2026"
+PASSWORD = "Concrete2026"
 
 st.title("화재 후 콘크리트 압축강도 예측")
 
@@ -69,12 +69,58 @@ else:
         step=1.0
     )
 
+st.header("Fiber information")
+
+fiber_types = ["None", "Steel", "PVA", "PP", "Glass", "Basalt"]
+
+if "fiber_count" not in st.session_state:
+    st.session_state.fiber_count = 0
+
+if st.button("+ Add Fiber"):
+    if st.session_state.fiber_count < 5:
+        st.session_state.fiber_count += 1
+    else:
+        st.warning("최대 5개 섬유까지만 추가할 수 있습니다.")
+
+fibers = []
+
+for i in range(st.session_state.fiber_count):
+    st.subheader(f"Fiber {i+1}")
+
+    fiber_type = st.selectbox(
+        f"Fiber {i+1} type",
+        fiber_types,
+        key=f"fiber_type_{i}"
+    )
+
+    fiber_content = st.number_input(
+        f"Fiber {i+1} content (kg/m³)",
+        min_value=0.0,
+        value=0.0,
+        step=0.1,
+        key=f"fiber_content_{i}"
+    )
+
+    fiber_length = st.number_input(
+        f"Fiber {i+1} length (mm)",
+        min_value=0.0,
+        value=0.0,
+        step=0.1,
+        key=f"fiber_length_{i}"
+    )
+
+    fibers.append({
+        "type": fiber_type,
+        "content": fiber_content,
+        "length": fiber_length
+    })
+
 if st.button("예측하기"):
     # 학습 때 사용한 변수 구조와 동일한 빈 데이터 생성
     input_df = pd.DataFrame(columns=feature_columns)
     input_df.loc[0] = 0
 
-    # 사용자가 입력한 값 반영
+    # 입력한 값 반영
     input_df.loc[0, "Temperature"] = temperature
     input_df.loc[0, "FC_28"] = fc_28
     input_df.loc[0, "W/C"] = wc
@@ -93,6 +139,44 @@ if st.button("예측하기"):
         input_df.loc[0, "Aggregate_type_Siliceous"] = 1
     else:
         input_df.loc[0, "Aggregate_type_Unknown"] = 1
+
+# 섬유 변수 초기화
+fiber_columns = [
+    "Steel_fibre", "Steel_fibre_length",
+    "PVA_fibre", "PVA_fibre_length",
+    "PP_fibre", "PP_fibre_length",
+    "Glass_fibre", "Glass_fibre_length",
+    "Basalt_fibre", "Basalt_fibre_length"
+]
+
+for col in fiber_columns:
+    input_df.loc[0, col] = 0
+
+# 섬유
+for fiber in fibers:
+    ftype = fiber["type"]
+    content = fiber["content"]
+    length = fiber["length"]
+
+    if ftype == "Steel":
+        input_df.loc[0, "Steel_fibre"] += content
+        input_df.loc[0, "Steel_fibre_length"] = length
+
+    elif ftype == "PVA":
+        input_df.loc[0, "PVA_fibre"] += content
+        input_df.loc[0, "PVA_fibre_length"] = length
+
+    elif ftype == "PP":
+        input_df.loc[0, "PP_fibre"] += content
+        input_df.loc[0, "PP_fibre_length"] = length
+
+    elif ftype == "Glass":
+        input_df.loc[0, "Glass_fibre"] += content
+        input_df.loc[0, "Glass_fibre_length"] = length
+
+    elif ftype == "Basalt":
+        input_df.loc[0, "Basalt_fibre"] += content
+        input_df.loc[0, "Basalt_fibre_length"] = length
 
     # 예측
     prediction = model.predict(input_df)[0]
