@@ -53,6 +53,10 @@ st.write(f"W/C = {wc:.3f}")
 aggregate = st.number_input("Coarse aggregate / 굵은골재 (kg/m³)", value=1000.0)
 sand = st.number_input("Fine aggregate / 잔골재 (kg/m³)", value=700.0)
 aggregate_type = st.selectbox("Aggregate type / 골재 종류", ["Carbonate", "Siliceous", "Unknown"])
+fly_ash = st.text_input("Fly Ash (kg/m³)")
+slag = st.text_input("Slag (kg/m³)")
+silica_fume = st.text_input("Silica Fume (kg/m³)")
+superplasticizer = st.text_input("Superplasticizer (kg/m³)")
 cooling_condition = st.selectbox( "Cooling condition", ["Hot", "Ambient", "Cooling period"])
 
 if cooling_condition == "Hot":
@@ -118,6 +122,8 @@ if st.button("예측하기"):
     input_df.loc[0] = 0
 
     # 입력한 값 반영
+    def optional_float(value):
+        return np.nan if value == "" else float(value)
     input_df.loc[0, "Temperature"] = temperature
     input_df.loc[0, "FC_28"] = fc_28
 
@@ -134,6 +140,7 @@ if st.button("예측하기"):
     input_df.loc[0, "Aggregate_type_Carbonate"] = 0
     input_df.loc[0, "Aggregate_type_Siliceous"] = 0
     input_df.loc[0, "Aggregate_type_Unknown"] = 0
+
     input_df.loc[0, "Cooling_Time"] = cooling_time
 
     if aggregate_type == "Carbonate":
