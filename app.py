@@ -49,6 +49,7 @@ st.write("입력값을 넣으면 화재 후 압축강도를 예측합니다.")
 temperature = st.number_input("Temperature (°C)", value=600.0)
 fc_28 = st.number_input("FC_28 (MPa)", value=40.0)
 fc_90 = st.text_input("FC_90 (MPa)")
+st.write(type(fc_90))
 cement = st.number_input("Cement (kg/m³)", value=400.0)
 water = st.number_input("Water (kg/m³)", value=180.0)
 
