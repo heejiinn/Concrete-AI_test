@@ -1,6 +1,6 @@
 import streamlit as st
 
-PASSWORD = "Concrete2026"
+PASSWORD = "concrete2026"
 
 st.title("화재 후 콘크리트 압축강도 예측")
 
@@ -35,9 +35,7 @@ model.load_model("xgb_concrete_strength_final.json")
 with open("feature_columns.pkl", "rb") as f:
     feature_columns = pickle.load(f)
 
-st.title("화재 후 콘크리트 압축강도 예측")
-
-st.write("입력값을 넣으면 XGBoost 모델이 화재 후 압축강도를 예측합니다.")
+st.write("입력값을 넣으면 화재 후 압축강도를 예측합니다.")
 
 # 기본 입력란
 temperature = st.number_input("Temperature (°C)", value=600.0)
