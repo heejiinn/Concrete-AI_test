@@ -27,7 +27,13 @@ import pickle
 from xgboost import XGBRegressor
 
 def optional_float(value):
-    return np.nan if value == "" else float(value)
+    if value is None:
+        return np.nan
+
+    if str(value).strip() == "":
+        return np.nan
+
+    return float(value)
 
 # 모델 불러오기
 model = XGBRegressor()
