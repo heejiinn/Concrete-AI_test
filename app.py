@@ -69,7 +69,7 @@ else:
         step=1.0
     )
 
-st.header("Fiber information")
+st.write("Fiber information")
 
 fiber_types = ["None", "Steel", "PVA", "PP", "Glass", "Basalt"]
 
@@ -141,42 +141,42 @@ if st.button("예측하기"):
         input_df.loc[0, "Aggregate_type_Unknown"] = 1
 
 # 섬유 변수 초기화
-fiber_columns = [
-    "Steel_fibre", "Steel_fibre_length",
-    "PVA_fibre", "PVA_fibre_length",
-    "PP_fibre", "PP_fibre_length",
-    "Glass_fibre", "Glass_fibre_length",
-    "Basalt_fibre", "Basalt_fibre_length"
-]
+    fiber_columns = [
+        "Steel_fibre", "Steel_fibre_length",
+        "PVA_fibre", "PVA_fibre_length",
+        "PP_fibre", "PP_fibre_length",
+        "Glass_fibre", "Glass_fibre_length",
+        "Basalt_fibre", "Basalt_fibre_length"
+    ]
 
-for col in fiber_columns:
-    input_df.loc[0, col] = 0
+    for col in fiber_columns:
+        input_df.loc[0, col] = 0
 
 # 섬유
-for fiber in fibers:
-    ftype = fiber["type"]
-    content = fiber["content"]
-    length = fiber["length"]
+    for fiber in fibers:
+        ftype = fiber["type"]
+        content = fiber["content"]
+        length = fiber["length"]
 
-    if ftype == "Steel":
-        input_df.loc[0, "Steel_fibre"] += content
-        input_df.loc[0, "Steel_fibre_length"] = length
+        if ftype == "Steel":
+            input_df.loc[0, "Steel_fibre"] += content
+            input_df.loc[0, "Steel_fibre_length"] = length
 
-    elif ftype == "PVA":
-        input_df.loc[0, "PVA_fibre"] += content
-        input_df.loc[0, "PVA_fibre_length"] = length
+        elif ftype == "PVA":
+            input_df.loc[0, "PVA_fibre"] += content
+            input_df.loc[0, "PVA_fibre_length"] = length
 
-    elif ftype == "PP":
-        input_df.loc[0, "PP_fibre"] += content
-        input_df.loc[0, "PP_fibre_length"] = length
+        elif ftype == "PP":
+            input_df.loc[0, "PP_fibre"] += content
+            input_df.loc[0, "PP_fibre_length"] = length
 
-    elif ftype == "Glass":
-        input_df.loc[0, "Glass_fibre"] += content
-        input_df.loc[0, "Glass_fibre_length"] = length
+        elif ftype == "Glass":
+            input_df.loc[0, "Glass_fibre"] += content
+            input_df.loc[0, "Glass_fibre_length"] = length
 
-    elif ftype == "Basalt":
-        input_df.loc[0, "Basalt_fibre"] += content
-        input_df.loc[0, "Basalt_fibre_length"] = length
+        elif ftype == "Basalt":
+            input_df.loc[0, "Basalt_fibre"] += content
+            input_df.loc[0, "Basalt_fibre_length"] = length
 
     # 예측
     prediction = model.predict(input_df)[0]
