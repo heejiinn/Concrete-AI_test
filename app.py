@@ -26,6 +26,9 @@ import pandas as pd
 import pickle
 from xgboost import XGBRegressor
 
+def optional_float(value):
+    return np.nan if value == "" else float(value)
+
 # 모델 불러오기
 model = XGBRegressor()
 model.load_model("xgb_concrete_strength_final.json")
@@ -125,10 +128,7 @@ if st.button("예측하기"):
     input_df.loc[0, "Temperature"] = temperature
     input_df.loc[0, "FC_28"] = fc_28
 
-    if fc_90 == "":
-        input_df.loc[0, "FC_90"] = np.nan
-    else:
-        input_df.loc[0, "FC_90"] = float(fc_90)
+    input_df.loc[0, "FC_90"] = optional_float(fc_90)
 
     input_df.loc[0, "W/C"] = wc
     input_df.loc[0, "Cement"] = cement
@@ -138,27 +138,10 @@ if st.button("예측하기"):
     input_df.loc[0, "Aggregate_type_Carbonate"] = 0
     input_df.loc[0, "Aggregate_type_Siliceous"] = 0
     input_df.loc[0, "Aggregate_type_Unknown"] = 0
-
-    if fly_ash == "":
-        input_df.loc[0, "Fly_ash"] = np.nan
-    else:
-        input_df.loc[0, "Fly_ash"] = float(fly_ash)
-
-    if slag == "":
-        input_df.loc[0, "Slag"] = np.nan
-    else:
-        input_df.loc[0, "Slag"] = float(slag)
-
-    if silica_fume == "":
-        input_df.loc[0, "Silica_fume"] = np.nan
-    else:
-        input_df.loc[0, "Silica_fume"] = float(silica_fume)
-
-    if superplasticizer == "":
-        input_df.loc[0, "Superplasticizer"] = np.nan
-    else:
-        input_df.loc[0, "Superplasticizer"] = float(superplasticizer)
-
+    input_df.loc[0, "Fly_ash"] = fly_ash
+    input_df.loc[0, "Slag"] = slag
+    input_df.loc[0, "Silica_fume"] = silica_fume
+    input_df.loc[0, "Superplasticizer"] = superplasticizer
     input_df.loc[0, "Cooling_Time"] = cooling_time
 
     if aggregate_type == "Carbonate":
