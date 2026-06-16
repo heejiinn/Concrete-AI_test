@@ -65,20 +65,25 @@ fly_ash = st.number_input("Fly Ash (kg/m³)", value=0)
 slag = st.number_input("Slag (kg/m³)", value=0)
 silica_fume = st.number_input("Silica Fume (kg/m³)", value=0)
 superplasticizer = st.number_input("Superplasticizer (kg/m³)", value=0)
-cooling_condition = st.selectbox( "Cooling condition", ["Hot", "Ambient", "Cooling period"])
 
-if cooling_condition == "Hot":
+if temperature <= 25:
+    st.info("20℃ 기준 시편은 비가열 시편으로 처리되며, 냉각 조건은 적용하지 않습니다.")
     cooling_time = 0
-
-elif cooling_condition == "Ambient":
-    cooling_time = 0.2
-
 else:
-    cooling_time = st.number_input(
-        "Cooling period (days)",
-        min_value=1.0,
-        value=1.0,
-        step=1.0)
+    cooling_condition = st.selectbox(
+        "Cooling condition",
+        ["Hot", "Ambient", "Cooling period"])
+
+    if cooling_condition == "Hot":
+        cooling_time = 0
+    elif cooling_condition == "Ambient":
+        cooling_time = 0.2
+    else:
+        cooling_time = st.number_input(
+            "Cooling period (days)",
+            min_value=1.0,
+            value=1.0,
+            step=1.0)
 
 st.write("Fiber information")
 
