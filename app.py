@@ -46,11 +46,12 @@ with open("feature_columns.pkl", "rb") as f:
 st.write("입력값을 넣으면 화재 후 압축강도를 예측합니다.")
 
 # 기본 입력란
-temperature = st.number_input("Temperature (°C)", value=600.0)
-fc_28 = st.number_input("FC_28 (MPa)", value=40.0)
-fc_90 = st.text_input("FC_90 (MPa)")
-cement = st.number_input("Cement (kg/m³)", value=400.0)
-water = st.number_input("Water (kg/m³)", value=180.0)
+category = st.selectbox("Concrete category / 콘크리트 종류", ["Concrete", "Lightweight_concrete", "Cementless_concrete"])
+temperature = st.number_input("Temperature (°C)", min_value=0, value=600.0, step=10, format="%d")
+fc_28 = st.number_input("28 day compressive strength (MPa)", min_value=0, value=40.0, step=1)
+fc_90 = st.text_input("90 day compressive strength (MPa)")
+cement = st.number_input("Cement (kg/m³)", min_value=0, value=400.0, step=1, format=".1f")
+water = st.number_input("Water (kg/m³)", min_value=0, value=180.0, step=1, format=".1f")
 
 if cement > 0:
     wc = water / cement
@@ -59,39 +60,28 @@ else:
 
 st.write(f"W/C = {wc:.3f}")
 
-aggregate = st.number_input("Coarse aggregate / 굵은골재 (kg/m³)", value=1000.0)
-sand = st.number_input("Fine aggregate / 잔골재 (kg/m³)", value=700.0)
+aggregate = st.number_input("Coarse aggregate / 굵은골재 (kg/m³)", min_value=0, value=1000.0, step=1, format=".1f")
+sand = st.number_input("Fine aggregate / 잔골재 (kg/m³)", min_value=0, value=700.0, step=1, format=".1f")
 aggregate_type = st.selectbox("Aggregate type / 골재 종류", ["Carbonate", "Siliceous"])
-fly_ash = st.number_input("Fly Ash (kg/m³)", value=0)
-slag = st.number_input("Slag (kg/m³)", value=0)
-silica_fume = st.number_input("Silica Fume (kg/m³)", value=0)
-superplasticizer = st.number_input("Superplasticizer (kg/m³)", value=0)
+fly_ash = st.number_input("Fly Ash (kg/m³)", min_value=0, value=0, step=1, format=".1f")
+slag = st.number_input("Slag (kg/m³)", min_value=0, value=0, step=1, format=".1f")
+silica_fume = st.number_input("Silica Fume (kg/m³)", min_value=0, value=0, step=1, format=".1f")
+superplasticizer = st.number_input("Superplasticizer (kg/m³)", min_value=0, value=0, step=1, format=".1f")
 
-test_day = st.number_input(
-    "Test age / 실험 재령 (days)",
-    min_value=1,
-    value=28,
-    step=1,
-    format="%d")
+test_day = st.number_input("Test age / 실험 재령 (days)", min_value=1, value=28, step=1, format="%d")
 
 if temperature <= 50:
     st.info("50℃ 이하의 시편은 비가열 시편으로 처리되며, 냉각 조건은 적용하지 않습니다.")
     cooling_time = 0
 else:
-    cooling_condition = st.selectbox(
-        "Cooling condition",
-        ["Hot", "Ambient", "Cooling period"])
+    cooling_condition = st.selectbox("Cooling condition", ["Hot", "Ambient", "Cooling period"])
 
     if cooling_condition == "Hot":
         cooling_time = 0
     elif cooling_condition == "Ambient":
         cooling_time = 0.2
     else:
-        cooling_time = st.number_input(
-            "Cooling period (days)",
-            min_value=1.0,
-            value=1.0,
-            step=1.0)
+        cooling_time = st.number_input("Cooling period (days)", min_value=1.0, value=1.0, step=1.0, format="%d")
 
 st.write("Fiber information")
 
@@ -113,29 +103,13 @@ fibers = []
 for i in range(st.session_state.fiber_count):
     st.write(f"Fiber {i+1}")
 
-    fiber_type = st.selectbox(
-        f"Fiber {i+1} type",
-        fiber_types,
-        key=f"fiber_type_{i}")
+    fiber_type = st.selectbox(f"Fiber {i+1} type", fiber_types, key=f"fiber_type_{i}")
 
-    fiber_content = st.number_input(
-        f"Fiber {i+1} content (kg/m³)",
-        min_value=0.0,
-        value=0.0,
-        step=0.1,
-        key=f"fiber_content_{i}")
+    fiber_content = st.number_input(f"Fiber {i+1} content (kg/m³)", min_value=0.0, value=0.0, step=0.1,format=".1f", key=f"fiber_content_{i}")
 
-    fiber_length = st.number_input(
-        f"Fiber {i+1} length (mm)",
-        min_value=0.0,
-        value=0.0,
-        step=0.1,
-        key=f"fiber_length_{i}")
+    fiber_length = st.number_input(f"Fiber {i+1} length (mm)", min_value=0.0, value=0.0, step=0.1, format=".1f", key=f"fiber_length_{i}")
 
-    fibers.append({
-        "type": fiber_type,
-        "content": fiber_content,
-        "length": fiber_length})
+    fibers.append({"type": fiber_type, "content": fiber_content, "length": fiber_length})
 
 if st.button("예측하기"):
     # 학습 때 사용한 변수 구조와 동일한 빈 데이터 생성
@@ -143,6 +117,20 @@ if st.button("예측하기"):
     input_df.loc[0] = 0
 
     # 입력한 값 반영
+    input_df.loc[0, "Category_Cementless_concrete"] = 0
+    input_df.loc[0, "Category_Concrete"] = 0
+    input_df.loc[0, "Category_Lightweight_concrete"] = 0
+
+    if category == "Concrete":
+        input_df.loc[0, "Category_Concrete"] = 1
+    elif category == "Lightweight_concrete":
+        input_df.loc[0, "Category_Lightweight_concrete"] = 1
+    elif category == "Cementless_concrete":
+        input_df.loc[0, "Category_Cementless_concrete"] = 1
+
+    input_df.loc[0, "Data_format_Code"] = 0
+    input_df.loc[0, "Data_format_Experiment"] = 1
+
     input_df.loc[0, "Temperature"] = temperature
     input_df.loc[0, "FC_28"] = fc_28
 
