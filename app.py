@@ -1,5 +1,16 @@
 import streamlit as st
 import matplotlib.pyplot as plt
+import pandas as pd
+import pickle
+from xgboost import XGBRegressor
+
+def optional_float(value):
+    value = value.strip()
+
+    if value == "":
+        return None
+
+    return float(value)
 
 PASSWORD = "Concrete2026"
 
@@ -23,29 +34,16 @@ if not st.session_state.authenticated:
 
     st.stop()
 
-import pandas as pd
-import pickle
-from xgboost import XGBRegressor
-
-def optional_float(value):
-    value = value.strip()
-
-    if value == "":
-        return None
-
-    return float(value)
-
-# 모델 불러오기
+#모델 불러오기
 model = XGBRegressor()
 model.load_model("xgb_concrete_strength_final.json")
 
-# 학습 당시 사용한 변수명 불러오기
 with open("feature_columns.pkl", "rb") as f:
     feature_columns = pickle.load(f)
 
 st.write("입력값을 넣으면 화재 후 압축강도를 예측합니다.")
 
-# 기본 입력란
+# 기본 입력
 category = st.selectbox("Concrete category / 콘크리트 종류", ["Concrete", "Lightweight concrete", "Cementless concrete"])
 temperature = st.number_input("Temperature (°C)", min_value=0, value=600, step=10, format="%d")
 fc_28 = st.number_input("28 day compressive strength (MPa)", min_value=0.0, value=40.0, step=1.0, format="%.1f")
@@ -57,7 +55,6 @@ if cement > 0:
     wc = water / cement
 else:
     wc = 0
-
 st.write(f"W/C = {wc:.3f}")
 
 aggregate = st.number_input("Coarse aggregate / 굵은골재 (kg/m³)", min_value=0.0, value=1000.0, step=1.0, format="%.1f")
@@ -84,7 +81,6 @@ else:
         cooling_time = st.number_input("Cooling period (days)", min_value=1, value=1, step=1, format="%d")
 
 st.write("Fiber information")
-
 st.write("동일한 종류의 섬유를 여러 길이로 사용한 경우, 함량은 합산하여 입력하고, 길이는 함량 가중평균 길이를 입력하세요.")
 
 fiber_types = ["None", "Steel", "PVA", "PP", "Glass", "Basalt"]
@@ -96,7 +92,7 @@ if st.button("+ Add Fiber"):
     if st.session_state.fiber_count < 5:
         st.session_state.fiber_count += 1
     else:
-        st.warning("최대 5개 섬유까지만 추가할 수 있습니다.")
+        st.warning("섬유 최대 5개까지만 추가할 수 있습니다.")
 
 fibers = []
 
@@ -104,19 +100,14 @@ for i in range(st.session_state.fiber_count):
     st.write(f"Fiber {i+1}")
 
     fiber_type = st.selectbox(f"Fiber {i+1} type", fiber_types, key=f"fiber_type_{i}")
-
     fiber_content = st.number_input(f"Fiber {i+1} content (kg/m³)", min_value=0.0, value=0.0, step=0.1,format="%.1f", key=f"fiber_content_{i}")
-
     fiber_length = st.number_input(f"Fiber {i+1} length (mm)", min_value=0.0, value=0.0, step=0.1, format="%.1f", key=f"fiber_length_{i}")
-
     fibers.append({"type": fiber_type, "content": fiber_content, "length": fiber_length})
 
 if st.button("예측하기"):
-    # 학습 때 사용한 변수 구조와 동일한 빈 데이터 생성
     input_df = pd.DataFrame(columns=feature_columns)
     input_df.loc[0] = 0
 
-    # 입력한 값 반영
     input_df.loc[0, "Category_Cementless_concrete"] = 0
     input_df.loc[0, "Category_Concrete"] = 0
     input_df.loc[0, "Category_Lightweight_concrete"] = 0
@@ -133,9 +124,7 @@ if st.button("예측하기"):
 
     input_df.loc[0, "Temperature"] = temperature
     input_df.loc[0, "FC_28"] = fc_28
-
     input_df.loc[0, "FC_90"] = optional_float(fc_90)
-
     input_df.loc[0, "W/C"] = wc
     input_df.loc[0, "Cement"] = cement
     input_df.loc[0, "Water"] = water
@@ -156,7 +145,7 @@ if st.button("예측하기"):
     elif aggregate_type == "Siliceous":
         input_df.loc[0, "Aggregate_type_Siliceous"] = 1
 
-# 섬유 변수 초기화
+# 섬유
     fiber_columns = [
         "Steel_fibre", "Steel_fibre_length",
         "PVA_fibre", "PVA_fibre_length",
@@ -167,7 +156,6 @@ if st.button("예측하기"):
     for col in fiber_columns:
         input_df.loc[0, col] = 0
 
-# 섬유
     for fiber in fibers:
         ftype = fiber["type"]
         content = fiber["content"]
@@ -224,7 +212,7 @@ if st.button("예측하기"):
 
     graph_df = pd.DataFrame(graph_data)
 
-    # 예측
+# 예측
     prediction = model.predict(input_df)[0]
 
     st.subheader("예측 결과")
