@@ -81,8 +81,8 @@ else:
         cooling_time = st.number_input("Cooling period (days)", min_value=1, value=1, step=1, format="%d")
 
 st.write("Fiber information")
-st.write("동일한 종류의 섬유를 여러 길이로 사용한 경우, 
-함량은 합산하여 입력하고, 길이는 함량 가중평균 길이를 입력하세요.")
+st.write("동일한 종류의 섬유를 여러 길이로 사용한 경우,")
+st.write("함량은 합산하여 입력하고, 길이는 함량 가중평균 길이를 입력하세요.")
 
 fiber_types = ["None", "Steel", "PVA", "PP", "Glass", "Basalt"]
 
