@@ -166,8 +166,6 @@ if st.button("예측하기"):
         input_df.loc[0, "Aggregate_type_Carbonate"] = 1
     elif aggregate_type == "Siliceous":
         input_df.loc[0, "Aggregate_type_Siliceous"] = 1
-    else:
-        input_df.loc[0, "Aggregate_type_Unknown"] = 1
 
 # 섬유 변수 초기화
     fiber_columns = [
@@ -206,8 +204,31 @@ if st.button("예측하기"):
             input_df.loc[0, "Basalt_fibre"] += content
             input_df.loc[0, "Basalt_fibre_length"] = length
 
+    graph_data = []
+
+    for temp in temp_list:
+        temp_df = input_df.copy()
+        temp_df.loc[0, "Temperature"] = temp
+
+        if temp <= 25:
+            temp_df.loc[0, "Cooling_Time"] = 0
+        else:
+            temp_df.loc[0, "Cooling_Time"] = cooling_time
+
+        pred_strength = model.predict(temp_df)[0]
+        ratio = pred_strength / control_strength * 100
+
+        graph_data.append({
+            "Temperature": temp,
+            "Predicted_Strength": pred_strength,
+            "Residual_Ratio": ratio})
+
+    graph_df = pd.DataFrame(graph_data)
+
     # 예측
     prediction = model.predict(input_df)[0]
 
     st.subheader("예측 결과")
     st.write(f"화재 후 압축강도 예측값: {prediction:.2f} MPa")
+    st.line_chart(
+    graph_df.set_index("Temperature")[["Predicted_Strength"]])
