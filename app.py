@@ -232,5 +232,6 @@ if st.button("예측하기"):
 
     st.subheader("예측 결과")
     st.write(f"화재 후 압축강도 예측값: {prediction:.2f} MPa")
-    st.line_chart(
-    graph_df.set_index("Temperature")[["Predicted_Strength"]])
+
+    st.subheader("Temperature-strength curve")
+    st.line_chart(graph_df.set_index("Temperature")[["Predicted strength (MPa)"]])
