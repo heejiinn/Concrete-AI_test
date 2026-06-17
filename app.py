@@ -204,6 +204,8 @@ if st.button("예측하기"):
             input_df.loc[0, "Basalt_fibre"] += content
             input_df.loc[0, "Basalt_fibre_length"] = length
 
+    temp_list = [20, 100, 200, 300, 400, 500, 600, 800, 1000, 1200]
+
     graph_data = []
 
     for temp in temp_list:
