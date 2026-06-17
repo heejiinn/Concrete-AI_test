@@ -66,8 +66,15 @@ slag = st.number_input("Slag (kg/m³)", value=0)
 silica_fume = st.number_input("Silica Fume (kg/m³)", value=0)
 superplasticizer = st.number_input("Superplasticizer (kg/m³)", value=0)
 
-if temperature <= 25:
-    st.info("20℃ 기준 시편은 비가열 시편으로 처리되며, 냉각 조건은 적용하지 않습니다.")
+test_day = st.number_input(
+    "Test age / 실험 재령 (days)",
+    min_value=1,
+    value=28,
+    step=1,
+    format="%d")
+
+if temperature <= 50:
+    st.info("50℃ 이하의 시편은 비가열 시편으로 처리되며, 냉각 조건은 적용하지 않습니다.")
     cooling_time = 0
 else:
     cooling_condition = st.selectbox(
@@ -153,6 +160,7 @@ if st.button("예측하기"):
     input_df.loc[0, "Silica_fume"] = silica_fume
     input_df.loc[0, "Superplasticizer"] = superplasticizer
     input_df.loc[0, "Cooling_Time"] = cooling_time
+    input_df.loc[0, "Test_day"] = test_day
 
     if aggregate_type == "Carbonate":
         input_df.loc[0, "Aggregate_type_Carbonate"] = 1
