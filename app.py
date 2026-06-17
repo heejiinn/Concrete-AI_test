@@ -212,18 +212,16 @@ if st.button("예측하기"):
         temp_df = input_df.copy()
         temp_df.loc[0, "Temperature"] = temp
 
-        if temp <= 25:
+        if temp <= 50:
             temp_df.loc[0, "Cooling_Time"] = 0
         else:
             temp_df.loc[0, "Cooling_Time"] = cooling_time
 
         pred_strength = model.predict(temp_df)[0]
-        ratio = pred_strength / control_strength * 100
 
         graph_data.append({
             "Temperature": temp,
-            "Predicted_Strength": pred_strength,
-            "Residual_Ratio": ratio})
+            "Predicted_Strength": pred_strength})
 
     graph_df = pd.DataFrame(graph_data)
 
@@ -234,4 +232,4 @@ if st.button("예측하기"):
     st.write(f"화재 후 압축강도 예측값: {prediction:.2f} MPa")
 
     st.subheader("Temperature-strength curve")
-    st.line_chart(graph_df.set_index("Temperature")[["Predicted strength (MPa)"]])
+    st.line_chart(graph_df.set_index("Temperature")[["Predicted compressive strength (MPa)"]])
