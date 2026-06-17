@@ -48,10 +48,10 @@ st.write("입력값을 넣으면 화재 후 압축강도를 예측합니다.")
 # 기본 입력란
 category = st.selectbox("Concrete category / 콘크리트 종류", ["Concrete", "Lightweight_concrete", "Cementless_concrete"])
 temperature = st.number_input("Temperature (°C)", min_value=0, value=600, step=10, format="%d")
-fc_28 = st.number_input("28 day compressive strength (MPa)", min_value=0.0, value=40.0, step=1.0, format=".1f")
+fc_28 = st.number_input("28 day compressive strength (MPa)", min_value=0.0, value=40.0, step=1.0, format="%.1f")
 fc_90 = st.text_input("90 day compressive strength (MPa)")
-cement = st.number_input("Cement (kg/m³)", min_value=0.0, value=400.0, step=1.0, format=".1f")
-water = st.number_input("Water (kg/m³)", min_value=0.0, value=180.0, step=1.0, format=".1f")
+cement = st.number_input("Cement (kg/m³)", min_value=0.0, value=400.0, step=1.0, format="%.1f")
+water = st.number_input("Water (kg/m³)", min_value=0.0, value=180.0, step=1.0, format="%.1f")
 
 if cement > 0:
     wc = water / cement
@@ -60,13 +60,13 @@ else:
 
 st.write(f"W/C = {wc:.3f}")
 
-aggregate = st.number_input("Coarse aggregate / 굵은골재 (kg/m³)", min_value=0.0, value=1000.0, step=1.0, format=".1f")
-sand = st.number_input("Fine aggregate / 잔골재 (kg/m³)", min_value=0.0, value=700.0, step=1.0, format=".1f")
+aggregate = st.number_input("Coarse aggregate / 굵은골재 (kg/m³)", min_value=0.0, value=1000.0, step=1.0, format="%.1f")
+sand = st.number_input("Fine aggregate / 잔골재 (kg/m³)", min_value=0.0, value=700.0, step=1.0, format="%.1f")
 aggregate_type = st.selectbox("Aggregate type / 골재 종류", ["Carbonate", "Siliceous"])
-fly_ash = st.number_input("Fly Ash (kg/m³)", min_value=0.0, value=0.0, step=1.0, format=".1f")
-slag = st.number_input("Slag (kg/m³)", min_value=0.0, value=0.0, step=1.0, format=".1f")
-silica_fume = st.number_input("Silica Fume (kg/m³)", min_value=0.0, value=0.0, step=1.0, format=".1f")
-superplasticizer = st.number_input("Superplasticizer (kg/m³)", min_value=0.0, value=0.0, step=1.0, format=".1f")
+fly_ash = st.number_input("Fly Ash (kg/m³)", min_value=0.0, value=0.0, step=1.0, format="%.1f")
+slag = st.number_input("Slag (kg/m³)", min_value=0.0, value=0.0, step=1.0, format="%.1f")
+silica_fume = st.number_input("Silica Fume (kg/m³)", min_value=0.0, value=0.0, step=1.0, format="%.1f")
+superplasticizer = st.number_input("Superplasticizer (kg/m³)", min_value=0.0, value=0.0, step=1.0, format="%.1f")
 
 test_day = st.number_input("Test age / 실험 재령 (days)", min_value=1, value=28, step=1, format="%d")
 
@@ -105,9 +105,9 @@ for i in range(st.session_state.fiber_count):
 
     fiber_type = st.selectbox(f"Fiber {i+1} type", fiber_types, key=f"fiber_type_{i}")
 
-    fiber_content = st.number_input(f"Fiber {i+1} content (kg/m³)", min_value=0.0, value=0.0, step=0.1,format=".1f", key=f"fiber_content_{i}")
+    fiber_content = st.number_input(f"Fiber {i+1} content (kg/m³)", min_value=0.0, value=0.0, step=0.1,format="%.1f", key=f"fiber_content_{i}")
 
-    fiber_length = st.number_input(f"Fiber {i+1} length (mm)", min_value=0.0, value=0.0, step=0.1, format=".1f", key=f"fiber_length_{i}")
+    fiber_length = st.number_input(f"Fiber {i+1} length (mm)", min_value=0.0, value=0.0, step=0.1, format="%.1f", key=f"fiber_length_{i}")
 
     fibers.append({"type": fiber_type, "content": fiber_content, "length": fiber_length})
 
