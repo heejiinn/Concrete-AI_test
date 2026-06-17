@@ -222,7 +222,7 @@ if st.button("예측하기"):
 
         graph_data.append({
             "Temperature": temp,
-            "Predicted Compressive Strength (MPa)": pred_strength})
+            "Compressive Strength (MPa)": pred_strength})
 
     graph_df = pd.DataFrame(graph_data)
 
@@ -238,7 +238,7 @@ if st.button("예측하기"):
 
     ax.plot(
         graph_df["Temperature"],
-        graph_df["Strength"],
+        graph_df["Compressive Strength (MPa)"],
         marker="o")
 
     ax.set_xlabel("Temperature (℃)")
