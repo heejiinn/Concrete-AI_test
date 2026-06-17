@@ -61,7 +61,7 @@ st.write(f"W/C = {wc:.3f}")
 
 aggregate = st.number_input("Coarse aggregate / 굵은골재 (kg/m³)", value=1000.0)
 sand = st.number_input("Fine aggregate / 잔골재 (kg/m³)", value=700.0)
-aggregate_type = st.selectbox("Aggregate type / 골재 종류", ["Carbonate", "Siliceous", "Unknown"])
+aggregate_type = st.selectbox("Aggregate type / 골재 종류", ["Carbonate", "Siliceous"])
 fly_ash = st.number_input("Fly Ash (kg/m³)", value=0)
 slag = st.number_input("Slag (kg/m³)", value=0)
 silica_fume = st.number_input("Silica Fume (kg/m³)", value=0)
