@@ -221,7 +221,7 @@ if st.button("예측하기"):
 
         graph_data.append({
             "Temperature": temp,
-            "Predicted_Strength": pred_strength})
+            "Predicted Compressive Strength": pred_strength})
 
     graph_df = pd.DataFrame(graph_data)
 
@@ -232,4 +232,4 @@ if st.button("예측하기"):
     st.write(f"화재 후 압축강도 예측값: {prediction:.2f} MPa")
 
     st.subheader("Temperature-strength curve")
-    st.line_chart(graph_df.set_index("Temperature")[["Predicted compressive strength (MPa)"]])
+    st.line_chart(graph_df.set_index("Temperature")[["Predicted Compressive Strength (MPa)"]])
