@@ -239,16 +239,9 @@ if st.button("예측하기"):
     # 예측
     prediction = model.predict(input_df)[0]
 
-    st.metric(
-        "Predicted residual compressive strength",
-        f"{residual_strength:.2f} MPa")
-
-    st.metric(
-        "Residual strength ratio",
-        f"{residual_ratio:.1f} %")
-
     st.subheader("예측 결과")
     st.write(f"화재 후 압축강도 예측값: {prediction:.2f} MPa")
+    st.write(f"잔존강도율: {residual_ratio:.1f} %")
 
     st.subheader("Temperature-strength curve")
 
