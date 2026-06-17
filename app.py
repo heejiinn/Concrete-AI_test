@@ -45,69 +45,69 @@ st.write("입력값을 넣으면 화재 후 압축강도를 예측합니다.")
 
 # 기본 입력
 col1, col2, col3 = st.columns(3)
-    with col1:
-        category = st.selectbox("Concrete category / 콘크리트 종류", ["Concrete", "Lightweight concrete", "Cementless concrete"])
-    with col2:
-        temperature = st.number_input("Temperature (°C)", min_value=0, value=600, step=10, format="%d")
-    with col3:
-        prediction_method = st.selectbox("Prediction method / 예측 방법", ["Experiment-based ML", "Code-based"])
+with col1:
+    category = st.selectbox("Concrete category / 콘크리트 종류", ["Concrete", "Lightweight concrete", "Cementless concrete"])
+with col2:
+    temperature = st.number_input("Temperature (°C)", min_value=0, value=600, step=10, format="%d")
+with col3:
+    prediction_method = st.selectbox("Prediction method / 예측 방법", ["Experiment-based ML", "Code-based"])
 
 col1, col2 = st.columns(2)
-    with col1:
-        fc_28 = st.number_input("28 day compressive strength (MPa)", min_value=0.0, value=40.0, step=1.0, format="%.1f")
-    with col2:
-        fc_90 = st.text_input("90 day compressive strength (MPa)")
+with col1:
+    fc_28 = st.number_input("28 day compressive strength (MPa)", min_value=0.0, value=40.0, step=1.0, format="%.1f")
+with col2:
+    fc_90 = st.text_input("90 day compressive strength (MPa)")
 
 col1, col2 = st.columns(2)
-    with col1:
-        cement = st.number_input("Cement (kg/m³)", min_value=0.0, value=400.0, step=1.0, format="%.1f")
-    with col2:
-        aggregate_type = st.selectbox("Aggregate type / 골재 종류", ["Carbonate", "Siliceous"])
+with col1:
+    cement = st.number_input("Cement (kg/m³)", min_value=0.0, value=400.0, step=1.0, format="%.1f")
+with col2:
+    aggregate_type = st.selectbox("Aggregate type / 골재 종류", ["Carbonate", "Siliceous"])
 
 col1, col2 = st.columns(2)
-    with col1:
-        water = st.number_input("Water (kg/m³)", min_value=0.0, value=180.0, step=1.0, format="%.1f")
-    with col2:
-        if cement > 0:
-            wc = water / cement
-        else:
-            wc = 0
-        st.write(f"W/C = {wc:.3f}")
+with col1:
+    water = st.number_input("Water (kg/m³)", min_value=0.0, value=180.0, step=1.0, format="%.1f")
+with col2:
+    if cement > 0:
+        wc = water / cement
+    else:
+        wc = 0
+    st.write(f"W/C = {wc:.3f}")
 
 col1, col2 = st.columns(2)
-    with col1:
-        aggregate = st.number_input("Coarse aggregate / 굵은골재 (kg/m³)", min_value=0.0, value=1000.0, step=1.0, format="%.1f")
-    with col2:
-        sand = st.number_input("Fine aggregate / 잔골재 (kg/m³)", min_value=0.0, value=700.0, step=1.0, format="%.1f")
+with col1:
+    aggregate = st.number_input("Coarse aggregate / 굵은골재 (kg/m³)", min_value=0.0, value=1000.0, step=1.0, format="%.1f")
+with col2:
+    sand = st.number_input("Fine aggregate / 잔골재 (kg/m³)", min_value=0.0, value=700.0, step=1.0, format="%.1f")
 
 col1, col2 = st.columns(2)
-    with col1:
-        fly_ash = st.number_input("Fly Ash (kg/m³)", min_value=0.0, value=0.0, step=1.0, format="%.1f")
-    with col2:
-        slag = st.number_input("Slag (kg/m³)", min_value=0.0, value=0.0, step=1.0, format="%.1f")
+with col1:
+    fly_ash = st.number_input("Fly Ash (kg/m³)", min_value=0.0, value=0.0, step=1.0, format="%.1f")
+with col2:
+    slag = st.number_input("Slag (kg/m³)", min_value=0.0, value=0.0, step=1.0, format="%.1f")
 
 col1, col2 = st.columns(2)
-    with col1:
-        silica_fume = st.number_input("Silica Fume (kg/m³)", min_value=0.0, value=0.0, step=1.0, format="%.1f")
-    with col2:
-        superplasticizer = st.number_input("Superplasticizer (kg/m³)", min_value=0.0, value=0.0, step=1.0, format="%.1f")
+with col1:
+    silica_fume = st.number_input("Silica Fume (kg/m³)", min_value=0.0, value=0.0, step=1.0, format="%.1f")
+with col2:
+    superplasticizer = st.number_input("Superplasticizer (kg/m³)", min_value=0.0, value=0.0, step=1.0, format="%.1f")
 
 col1, col2 = st.columns(2)
-    with col1:
-        test_day = st.number_input("Test age / 실험 재령 (days)", min_value=1, value=28, step=1, format="%d")
-    with col2:
-        if temperature <= 50:
-            st.info("50℃ 이하의 시편은 비가열 시편으로 처리되며, 냉각 조건은 적용하지 않습니다.")
+with col1:
+    test_day = st.number_input("Test age / 실험 재령 (days)", min_value=1, value=28, step=1, format="%d")
+with col2:
+    if temperature <= 50:
+        st.info("50℃ 이하의 시편은 비가열 시편으로 처리되며, 냉각 조건은 적용하지 않습니다.")
+        cooling_time = 0
+    else:
+        cooling_condition = st.selectbox("Cooling condition", ["Hot", "Ambient", "Cooling period"])
+
+        if cooling_condition == "Hot":
             cooling_time = 0
+        elif cooling_condition == "Ambient":
+            cooling_time = 0.2
         else:
-            cooling_condition = st.selectbox("Cooling condition", ["Hot", "Ambient", "Cooling period"])
-
-            if cooling_condition == "Hot":
-                cooling_time = 0
-            elif cooling_condition == "Ambient":
-                cooling_time = 0.2
-            else:
-                cooling_time = st.number_input("Cooling period (days)", min_value=1, value=1, step=1, format="%d")
+            cooling_time = st.number_input("Cooling period (days)", min_value=1, value=1, step=1, format="%d")
 
 st.write("Fiber information")
 st.caption("동일한 종류의 섬유를 여러 길이로 사용한 경우, 함량은 합산하여 입력하고, 길이는 함량 가중평균 길이를 입력하세요.")
