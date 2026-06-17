@@ -221,7 +221,7 @@ if st.button("예측하기"):
 
         graph_data.append({
             "Temperature": temp,
-            "Predicted Compressive Strength": pred_strength})
+            "Predicted Compressive Strength (MPa)": pred_strength})
 
     graph_df = pd.DataFrame(graph_data)
 
