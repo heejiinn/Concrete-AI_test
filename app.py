@@ -1,4 +1,5 @@
 import streamlit as st
+import matplotlib.pyplot as plt
 
 PASSWORD = "Concrete2026"
 
@@ -232,4 +233,17 @@ if st.button("예측하기"):
     st.write(f"화재 후 압축강도 예측값: {prediction:.2f} MPa")
 
     st.subheader("Temperature-strength curve")
-    st.line_chart(graph_df.set_index("Temperature")[["Predicted Compressive Strength (MPa)"]])
+
+    fig, ax = plt.subplots()
+
+    ax.plot(
+        graph_df["Temperature"],
+        graph_df["Strength"],
+        marker="o")
+
+    ax.set_xlabel("Temperature (℃)")
+    ax.set_ylabel("Predicted compressive strength (MPa)")
+    ax.set_title("Temperature-strength curve")
+    ax.grid(True)
+
+    st.pyplot(fig)
