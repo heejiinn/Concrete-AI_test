@@ -44,6 +44,25 @@ with open("feature_columns.pkl", "rb") as f:
 st.write("입력값을 넣으면 화재 후 압축강도를 예측합니다.")
 
 # 기본 입력
+col1, col2 = st.columns(2)
+
+with col1:
+    temperature = st.number_input(
+        "Temperature (°C)",
+        min_value=20,
+        value=600,
+        step=10,
+        format="%d"
+    )
+
+with col2:
+    fc_28 = st.number_input(
+        "28 day compressive strength (MPa)",
+        min_value=0.0,
+        value=40.0,
+        step=0.1,
+        format="%.1f"
+    )
 category = st.selectbox("Concrete category / 콘크리트 종류", ["Concrete", "Lightweight concrete", "Cementless concrete"])
 temperature = st.number_input("Temperature (°C)", min_value=0, value=600, step=10, format="%d")
 fc_28 = st.number_input("28 day compressive strength (MPa)", min_value=0.0, value=40.0, step=1.0, format="%.1f")
