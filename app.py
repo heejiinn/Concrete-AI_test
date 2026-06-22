@@ -154,7 +154,13 @@ if st.button("예측하기"):
         input_df.loc[0, "Category_Cementless_concrete"] = 1
 
     input_df.loc[0, "Data_format_Code"] = 0
-    input_df.loc[0, "Data_format_Experiment"] = 1
+    input_df.loc[0, "Data_format_Experiment"] = 0
+
+    if prediction_method == "Experiment-based ML":
+        input_df.loc[0, "Data_format_Experiment"] = 1
+
+    elif prediction_method == "Code-based":
+        input_df.loc[0, "Data_format_Code"] = 1
 
     input_df.loc[0, "Temperature"] = temperature
     input_df.loc[0, "FC_28"] = fc_28
