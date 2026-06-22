@@ -162,6 +162,12 @@ if st.button("예측하기"):
     elif prediction_method == "Code-based":
         input_df.loc[0, "Data_format_Code"] = 1
 
+    st.write(
+    input_df[[
+        "Data_format_Code",
+        "Data_format_Experiment"]])
+
+    
     input_df.loc[0, "Temperature"] = temperature
     input_df.loc[0, "FC_28"] = fc_28
     input_df.loc[0, "FC_90"] = optional_float(fc_90)
