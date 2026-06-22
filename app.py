@@ -50,7 +50,7 @@ with col1:
 with col2:
     temperature = st.number_input("Temperature (°C)", min_value=0, value=600, step=10, format="%d")
 with col3:
-    prediction_method = st.selectbox("Prediction method / 예측 방법", ["Experiment-based ML", "Code-based"])
+    prediction_method = st.selectbox("Prediction method / 예측 방법", ["Experiment-based", "Code-based"])
 
 col1, col2 = st.columns(2)
 with col1:
@@ -156,18 +156,12 @@ if st.button("예측하기"):
     input_df.loc[0, "Data_format_Code"] = 0
     input_df.loc[0, "Data_format_Experiment"] = 0
 
-    if prediction_method == "Experiment-based ML":
+    if prediction_method == "Experiment-based":
         input_df.loc[0, "Data_format_Experiment"] = 1
 
     elif prediction_method == "Code-based":
         input_df.loc[0, "Data_format_Code"] = 1
 
-    st.write(
-    input_df[[
-        "Data_format_Code",
-        "Data_format_Experiment"]])
-
-    
     input_df.loc[0, "Temperature"] = temperature
     input_df.loc[0, "FC_28"] = fc_28
     input_df.loc[0, "FC_90"] = optional_float(fc_90)
