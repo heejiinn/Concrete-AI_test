@@ -44,13 +44,18 @@ with open("feature_columns.pkl", "rb") as f:
 st.write("입력값을 넣으면 화재 후 압축강도를 예측합니다.")
 
 # 기본 입력
-col1, col2, col3 = st.columns(3)
+col1, col2 = st.columns(2)
+with col1:
+    prediction_method = st.selectbox("Prediction method / 예측 방법", ["Experiment-based", "Code-based"])
+with col2:
+    design_code = st.selectbox("Design code / 적용 기준", ["Eurocode 2", "ACI", "fib Model Code"], disabled=True)
+if prediction_method == "Code-based": st.info("현재 Code 기반 예측 압축강도는 검토 중으로, Experiment 기반 예측만 가능합니다.")
+
+col1, col2 = st.columns(2)
 with col1:
     category = st.selectbox("Concrete category / 콘크리트 종류", ["Concrete", "Lightweight concrete", "Cementless concrete"])
 with col2:
     temperature = st.number_input("Temperature (°C)", min_value=0, value=600, step=10, format="%d")
-with col3:
-    prediction_method = st.selectbox("Prediction method / 예측 방법", ["Experiment-based", "Code-based"])
 
 col1, col2 = st.columns(2)
 with col1:
@@ -142,6 +147,15 @@ if st.button("예측하기"):
     input_df = pd.DataFrame(columns=feature_columns)
     input_df.loc[0] = 0
 
+    input_df.loc[0, "Data_format_Code"] = 0
+    input_df.loc[0, "Data_format_Experiment"] = 0
+
+    if prediction_method == "Experiment-based":
+        input_df.loc[0, "Data_format_Experiment"] = 1
+
+    elif prediction_method == "Code-based":
+        input_df.loc[0, "Data_format_Code"] = 1
+
     input_df.loc[0, "Category_Cementless_concrete"] = 0
     input_df.loc[0, "Category_Concrete"] = 0
     input_df.loc[0, "Category_Lightweight_concrete"] = 0
@@ -152,15 +166,6 @@ if st.button("예측하기"):
         input_df.loc[0, "Category_Lightweight_concrete"] = 1
     elif category == "Cementless_concrete":
         input_df.loc[0, "Category_Cementless_concrete"] = 1
-
-    input_df.loc[0, "Data_format_Code"] = 0
-    input_df.loc[0, "Data_format_Experiment"] = 0
-
-    if prediction_method == "Experiment-based":
-        input_df.loc[0, "Data_format_Experiment"] = 1
-
-    elif prediction_method == "Code-based":
-        input_df.loc[0, "Data_format_Code"] = 1
 
     input_df.loc[0, "Temperature"] = temperature
     input_df.loc[0, "FC_28"] = fc_28
