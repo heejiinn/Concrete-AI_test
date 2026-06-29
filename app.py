@@ -165,9 +165,9 @@ with input_area:
 
         if category == "Concrete":
             input_df.loc[0, "Category_Concrete"] = 1
-        elif category == "Lightweight_concrete":
+        elif category == "Lightweight concrete":
             input_df.loc[0, "Category_Lightweight_concrete"] = 1
-        elif category == "Cementless_concrete":
+        elif category == "Cementless concrete":
             input_df.loc[0, "Category_Cementless_concrete"] = 1
 
         input_df.loc[0, "Temperature"] = temperature
@@ -281,7 +281,7 @@ with result_area:
         graph_df = st.session_state.graph_df
 
         fig, ax = plt.subplots(figsize=(5, 4))
-        ax.plot(graph_df["Temperature"], graph_df["Strength"], marker="o")
+        ax.plot(graph_df["Temperature"], graph_df["Compressive Strength (MPa)"], marker="o")
         ax.set_xlabel("Temperature (℃)")
         ax.set_ylabel("Predicted compressive strength (MPa)")
         ax.set_title("Temperature-strength curve")
