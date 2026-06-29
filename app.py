@@ -146,6 +146,7 @@ with input_area:
             fiber_length = st.number_input(f"Fiber {i+1} length (mm)", min_value=0.0, value=0.0, step=0.1, format="%.1f", key=f"fiber_length_{i}")
         fibers.append({"type": fiber_type, "content": fiber_content, "length": fiber_length})
 
+with result_area:
     if st.button("예측하기"):
         input_df = pd.DataFrame(columns=feature_columns)
         input_df.loc[0] = 0
@@ -260,7 +261,6 @@ with input_area:
 
         graph_df = pd.DataFrame(graph_data)
 
-with result_area:
     # 예측
         prediction = model.predict(input_df)[0]
 
