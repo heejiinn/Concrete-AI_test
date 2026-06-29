@@ -5,7 +5,8 @@ import pickle
 from xgboost import XGBRegressor
 
 st.set_page_config(page_title="Concrete Residual Strength Prediction", layout="wide")
-input_area, result_area = st.columns([2.2, 1], gap="large")
+st.markdown("""<style>.block-container { max-width: 1350px; padding-top: 2rem; padding-left: 4rem; padding-right: 4rem; } </style> """, unsafe_allow_html=True)
+input_area, result_area = st.columns([1.7, 1], gap="large")
 
 def optional_float(value):
     value = value.strip()
