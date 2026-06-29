@@ -229,8 +229,6 @@ with input_area:
                 input_df.loc[0, "Basalt_fibre"] += content
                 input_df.loc[0, "Basalt_fibre_length"] = length
 
-with result_area:
-
         residual_strength = model.predict(input_df)[0]
 
         control_df = input_df.copy()
@@ -262,25 +260,31 @@ with result_area:
 
         graph_df = pd.DataFrame(graph_data)
 
-    # 예측
-        prediction = model.predict(input_df)[0]
+        st.session_state.residual_strength = residual_strength
+        st.session_state.control_strength = conrtol_strength
+        st.session_state.residual_ratio = residual_ratio
+        st.session_state.graph_df = graph_df
 
+with result_area:
+
+    if "graph_df" in st.session_state:
         st.subheader("예측 결과")
-        st.write(f"화재 후 압축강도 예측값: {prediction:.2f} MPa")
-        st.write(f"잔존강도율: {residual_ratio:.1f} %")
 
-        st.subheader("Temperature-strength curve")
+        metric_col1, metric_col2 = st.columns(2)
 
-        fig, ax = plt.subplots()
+        with metric_col1:
+            st.metric("Residual strength", f"{st.session_state.residual_strength:.2f} MPa")
 
-        ax.plot(
-            graph_df["Temperature"],
-            graph_df["Compressive Strength (MPa)"],
-            marker="o")
+        with metric_col2:
+            st.metric("Residual ratio", f"{st.session_state.residual_ratio:.1f} %")
 
+        graph_df = st.session_state.graph_df
+
+        fig, ax = plt.subplots(figsize=(5, 4))
+        ax.plot(graph_df["Temperature"], graph_df["Strength"], marker="o")
         ax.set_xlabel("Temperature (℃)")
         ax.set_ylabel("Predicted compressive strength (MPa)")
         ax.set_title("Temperature-strength curve")
         ax.grid(True)
 
-        st.pyplot(fig)
+        st.pyplot(fig, use_container_width=True)
