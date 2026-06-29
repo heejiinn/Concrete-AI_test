@@ -261,7 +261,7 @@ with input_area:
         graph_df = pd.DataFrame(graph_data)
 
         st.session_state.residual_strength = residual_strength
-        st.session_state.control_strength = conrtol_strength
+        st.session_state.control_strength = control_strength
         st.session_state.residual_ratio = residual_ratio
         st.session_state.graph_df = graph_df
 
