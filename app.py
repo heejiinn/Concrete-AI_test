@@ -58,7 +58,7 @@ with input_area:
     with col1:
         category = st.selectbox("Concrete category / 콘크리트 종류", ["Concrete", "Lightweight concrete", "Cementless concrete"])
     with col2:
-        temperature = st.number_input("Temperature (°C)", min_value=0, value=600, step=10, format="%d")
+        temperature = st.number_input("Temperature (°C)", min_value=0, max_value=1200, value=600, step=10, format="%d")
 
     col1, col2 = st.columns(2)
     with col1:
